@@ -4,46 +4,91 @@
 
 O sistema recebe as imagens de uma câmera comum, lê um QR Code que contém as informações do funcionário (nome, curso e validade), valida os dados e, se estiver tudo certo, libera o acesso. Caso haja problema (curso vencido), envia alerta ao supervisor e aciona a sirene. Tudo está integrado a um dashboard que atualiza as imagens e o diagnóstico final em tempo real
 
-## Aplicativos E Softwares Para Baixar
+## Funcionalidades
 
-• Python 3.x
-• VS Code
-• Arduino IDE
-• GitHub (para hospedar o dashboard HTML/CSS/JS)
+- Leitura de QR Code contendo informações do funcionário.
+- Validação de curso e validade do treinamento.
+- Detecção em tempo real dos EPIs usando YOLOv8.
+- Alerta visual e textual sobre autorização do funcionário.
+- Desenho de caixas delimitadoras e nomes dos EPIs detectados no vídeo.
 
-## Bibliotecas Python Para Instalar
+## Tecnologias
 
-terminal/cmd :
-pip install flask opencv-python pyzbar pillow qrcode[pil] pyserial
+- Python 3.8+
+- OpenCV
+- Roboflow
+- YOLOv8 (Ultralytics)
+- JSON para leitura de dados do QR Code
 
-## Estrutura Do Projeto
+## Requisitos
 
+- Python 3.8 ou superior
+- Pip
+- Biblioteca `ultralytics` (YOLOv8)
+- OpenCV
+- Roboflow API Key
 
-1. Captura de imagem com OpenCV (Python)
-2. Leitura do QR Code com pyzbar
-3. Validação da data de validade (comparação com data atual)
-4. API Flask para centralizar o processamento
-5. Dashboard em HTML/CSS/JS (hospedado no GitHub Pages)
-6. Integração com Arduino/ESP32 usando PySerial para ativar sirene
+## Instalação
 
-## Plano De Implementação (Passo A Passo)
+1. Clone este repositório:
 
+```bash
+git clone https://github.com/seuusuario/epi-qr-detector.git
+cd epi-qr-detector
+```
 
-1. Preparar ambiente: instalar Python, VS Code, bibliotecas.
-2. Gerar QR Codes de funcionários.
-3. Criar script para abrir câmera e ler QR Codes.
-4. Validar se o curso está dentro da validade.
-5. Criar dashboard web simples para mostrar status.
-6. Integrar com sirene via Arduino/ESP32.
-7. Hospedar dashboard no GitHub Pages e fazer teste final.
+2. Instale as dependências:
 
-## Dicas Importantes
+```bash
+pip install ultralytics opencv-python roboflow
+```
 
-• Testar cada parte separadamente (QR Code, câmera, dashboard).
-• Usar JSON para facilitar leitura dos dados.
-• Manter o código organizado em pastas (api/, dashboard/, testes/).
-• Fazer backup do projeto no GitHub para não perder o código.
+3. Baixe o dataset do Roboflow e treine o modelo:
 
-## Fluxo Do Sistema
+- Faça o download do dataset no Roboflow (Yolov8)
+- Treine o modelo localmente ou use o Roboflow Train Cloud
+- Certifique-se de gerar o best.pt no caminho runs/detect/train/best.pt
 
-Câmera → Leitura QR Code (Python) → Validação de Dados → Dashboard (HTML/CSS/JS) e Sirene/Alerta
+## Uso
+
+1. Adicione sua Roboflow API Key no código:
+
+```bash
+rf = Roboflow(api_key="SUA_API_KEY")
+```
+
+2. Ajuste o caminho do modelo YOLO:
+
+```bash
+caminho_modelo = "runs/detect/train/best.pt"
+```
+
+3. Execute o código principal:
+
+```bash
+python main.py
+```
+
+4. Aponte a câmera para o QR Code do funcionário. O sistema verificará:
+
+- Curso válido
+- Validade do curso
+- Presença de todos os EPIs obrigatórios
+
+5. O programa exibirá mensagens no terminal e desenhará caixas nos EPIs detectados.
+
+## Personalização
+
+- EPIs obrigatórios: altere a lista no código:
+
+```bash
+epis_obrigatorios = ["capacete", "luvas", "mascara"]
+```
+
+- Câmera: altere o índice em cv2.VideoCapture(0) caso tenha múltiplas câmeras.
+
+## Observações
+
+- Para melhor performance, é recomendado usar GPU.
+- O modelo deve ser treinado com imagens do ambiente real de uso dos EPIs.
+- A validação ocorre em tempo real, mas pode ser otimizada para rodar a cada N frames.
