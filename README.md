@@ -1,8 +1,6 @@
-# Guia do Projeto
+# EPI QR Code Detector
 
-## Descrição Do Projeto
-
-O sistema recebe as imagens de uma câmera comum, lê um QR Code que contém as informações do funcionário (nome, curso e validade), valida os dados e, se estiver tudo certo, libera o acesso. Caso haja problema (curso vencido), envia alerta ao supervisor e aciona a sirene. Tudo está integrado a um dashboard que atualiza as imagens e o diagnóstico final em tempo real
+Sistema de leitura de QR Code integrado com detecção de Equipamentos de Proteção Individual (EPIs) usando YOLOv8. O projeto valida se um funcionário possui o curso correto, se está dentro da validade e se todos os EPIs obrigatórios estão presentes.
 
 ## Funcionalidades
 
