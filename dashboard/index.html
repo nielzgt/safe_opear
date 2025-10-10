@@ -1,13 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Pink</title>
 
-    <link rel="stylesheet" href="./src/css/styles.css">
+<head>
+  <meta charset="UTF-8">
+  <title>Safe Opear</title>
+  <link rel="stylesheet" href="./src/css/styles.css">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
 </head>
+
 <body>
-    
+  <header>
+    <img src="./src/img/senai.png" alt="Logo Senai" class="logo-senai" width="200">
+    <img src="./src/img/logo.png" alt="Logo Safe Opear" class="logo-safe-opear" width="85">
+    <img src="./src/img/pi.webp" alt="Logo Projetos Integradores" class="logo-pi" width="150">
+  </header>
+
+  <section>
+    <div class="camera"></div>
+    <div class="dados">
+      <div class="funcionario">
+        <h2><span id="nome">NOME</span></h2>
+        <br>
+        <img src="./src/img/profile.png" alt="Funcionário" id="foto" width="125">
+      </div>
+      <br>
+      <div class="status">
+        <p><span>Curso:</span> <span id="curso">--</span></p>
+        <p><span>Validade:</span> <span id="validade">--</span></p>
+        <ul>
+          <p>EPIs:</p>
+          <li><span>Capacete:</span> <span id="capacete">--</span></li>
+          <li><span>Óculos:</span> <span id="oculos">--</span></li>
+          <li><span>Colete:</span> <span id="colete">--</span></li>
+          <li><span>Luvas:</span> <span id="luvas">--</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    async function atualizar() {
+      try {
+        const res = await fetch('http://localhost:5000/registro');
+        const dados = await res.json();
+
+        document.getElementById("nome").innerText = dados.nome || "--";
+        const img = document.getElementById("foto-funcionario");
+        if (dados.foto && dados.foto.trim() !== "") {
+          img.src = `./src/img/${dados.foto}`;
+        } else {
+          img.src = "./src/img/anonimo.png";
+        }
+        document.getElementById("curso").innerText = dados.curso || "--";
+        document.getElementById("validade").innerText = dados.validade || "--";
+        document.getElementById("capacete").innerText = dados.capacete || "--";
+        document.getElementById("oculos").innerText = dados.oculos || "--";
+        document.getElementById("colete").innerText = dados.colete || "--";
+        document.getElementById("luvas").innerText = dados.luvas || "--";
+      } catch (err) {
+        console.error("Erro ao buscar dados:", err);
+      }
+    }
+
+    setInterval(atualizar, 2000);
+    atualizar();
+  </script>
 </body>
+
 </html>

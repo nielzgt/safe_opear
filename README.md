@@ -1,92 +1,118 @@
-# EPI QR Code Detector
+# Safe Opear
 
-Sistema de leitura de QR Code integrado com detecção de Equipamentos de Proteção Individual (EPIs) usando YOLOv8. O projeto valida se um funcionário possui o curso correto, se está dentro da validade e se todos os EPIs obrigatórios estão presentes.
+Sistema integrado de leitura de QR Code com detecção de Equipamentos de Proteção Individual (EPIs) usando YOLOv8.
+O projeto valida se um funcionário possui o curso correto, está dentro da validade e se utiliza todos os EPIs obrigatórios, enviando as informações em tempo real para um dashboard web.
 
 ## Funcionalidades
 
-- Leitura de QR Code contendo informações do funcionário.
-- Validação de curso e validade do treinamento.
-- Detecção em tempo real dos EPIs usando YOLOv8.
-- Alerta visual e textual sobre autorização do funcionário.
-- Desenho de caixas delimitadoras e nomes dos EPIs detectados no vídeo.
+- Leitura de QR Code com dados do funcionário (nome, curso, validade);
+- Validação automática do curso e da validade;
+- Detecção em tempo real dos EPIs via YOLOv8;
+- Envio automático das informações para um backend Flask;
+- Dashboard web que exibe o status atualizado de cada funcionário e dos EPIs;
+- Feedback visual no vídeo com caixas e texto sobre o status da autorização.
 
-## Tecnologias
+## Tecnologias Utilizadas
 
-- Python 3.8+
-- OpenCV
-- Roboflow
-- YOLOv8 (Ultralytics)
-- JSON para leitura de dados do QR Code
+- Python 3.8+;
+- Flask (backend);
+- OpenCV;
+- Ultralytics YOLOv8;
+- Roboflow;
+- Pillow (PIL);
+- HTML + JavaScript;
+- JSON para leitura de dados do QR Code.
+
+## Estrutura do projeto
+
+```bash
+epi-qr-detector/
+│
+├── safe_opear.py       # Leitura de QR Code e detecção YOLO
+├── app.py              # Servidor Flask (recebe dados e fornece ao dashboard)
+├── templates/
+│   └── index.html      # Dashboard web em tempo real
+├── runs/
+│   └── detect/
+│       └── train/
+│           └── weights/
+│               └── best.pt  # Modelo treinado YOLOv8
+└── src/
+    └── css/
+        └── styles.css       # Estilo do dashboard
+```
 
 ## Requisitos
 
-- Python 3.8 ou superior
-- Pip
-- Biblioteca `ultralytics` (YOLOv8)
-- OpenCV
-- Roboflow API Key
-
-## Instalação
-
-1. Clone este repositório:
-
+- Python 3.8 ou superior;
+- Pip instalado;
+- Dependências:
 ```bash
-git clone https://github.com/seuusuario/epi-qr-detector.git
-cd epi-qr-detector
+pip install ultralytics opencv-python pillow flask requests
 ```
 
-2. Instale as dependências:
+## Treinamento do Modelo (YOLOv8)
 
+1. Crie ou baixe um dataset com as classes de EPIs (capacete, óculos, luvas etc.);
+2. Faça upload no Roboflow (ou use localmente);
+3. Treine o modelo e gere o arquivo best.pt no caminho:
 ```bash
-pip install ultralytics opencv-python roboflow
+main/runs/detect/train/weights/best.pt
 ```
-
-3. Baixe o dataset do Roboflow e treine o modelo:
-
-- Faça o download do dataset no Roboflow (Yolov8)
-- Treine o modelo localmente ou use o Roboflow Train Cloud
-- Certifique-se de gerar o best.pt no caminho runs/detect/train/best.pt
 
 ## Uso
 
-1. Adicione sua Roboflow API Key no código:
+1. Inicie o servidor Flask
 
 ```bash
-rf = Roboflow(api_key="SUA_API_KEY")
+python app.py
 ```
+O dashboard estará disponível em:
+http://localhost:5000
 
-2. Ajuste o caminho do modelo YOLO:
+2. Execute o detector:
 
 ```bash
-caminho_modelo = "runs/detect/train/best.pt"
+python main/safe_opear.py
 ```
 
-3. Execute o código principal:
+3. Aponte a câmera para o QR Code do funcionário
 
-```bash
-python main.py
-```
-
-4. Aponte a câmera para o QR Code do funcionário. O sistema verificará:
-
-- Curso válido
-- Validade do curso
-- Presença de todos os EPIs obrigatórios
-
-5. O programa exibirá mensagens no terminal e desenhará caixas nos EPIs detectados.
+O sistema fará automaticamente:
+- Validação de curso e validade;
+- Detecção dos EPIs obrigatórios;
+- Envio dos resultados para o dashboard.
 
 ## Personalização
 
-- EPIs obrigatórios: altere a lista no código:
-
+- EPIs obrigatórios:
+Edite no arquivo:
 ```bash
-epis_obrigatorios = ["capacete", "luvas", "mascara"]
+epis_ordem = ["helmet", "glasses"]
+```
+(Certifique-se de usar as mesmas classes que o modelo YOLO detecta.)
+
+- Câmera:
+Se você tiver mais de uma, altere:
+```bash
+cap = cv2.VideoCapture(0)
 ```
 
-- Câmera: altere o índice em cv2.VideoCapture(0) caso tenha múltiplas câmeras.
+- Servidor remoto:
+Para enviar os dados a outro servidor, altere no safe_opear.py:
+```bash
+requests.post("http://localhost:5000/registro", json=dados)
+```
 
-## Observações
+## Dashboard em Tempo Real
 
-- Para melhor performance, é recomendado usar GPU.
-- O modelo deve ser treinado com imagens do ambiente real de uso dos EPIs.
-- A validação ocorre em tempo real, mas pode ser otimizada para rodar a cada N frames.
+O arquivo index.html exibe:
+- Nome, curso e validade do funcionário;
+- Status atualizado dos EPIs (OK/FALTANDO);
+- Última atualização (data e hora);
+A página atualiza automaticamente a cada 1 segundo usando JavaScript.
+
+## Licença
+
+Este projeto é livre para uso educacional e pode ser modificado conforme necessário.
+Créditos para a comunidade Ultralytics YOLOv8 e Roboflow.

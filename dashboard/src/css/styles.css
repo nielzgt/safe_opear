@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #a8cdff;
+    padding: 10px;
+}
+
+section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2% 0;
+}
+
+.camera {
+    height: 480px;
+    width: 640px;
+    background-color: #999;
+    border: 2px solid #114490;
+    background-image: url('../img/camera.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 35px;
+}
+
+.dados {
+    text-align: center;
+    align-items: center;
+}
+
+.dados .funcionario {
+    padding: 2%;
+}
+
+.dados .funcionario span {
+    font-weight: bold;
+}
+
+.dados .funcionario img {
+    border-radius: 50%;
+    background-color: #999;
+}
+
+.dados .status {
+    text-align: left;
+    background-color: #114490;
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+
+.dados .status span:first-child {
+    font-weight: bold;
+}
+
+.dados .status ul p:first-child {
+    font-weight: bold;
+}
+
+
+.dados .status p {
+    margin-bottom: 5px;
+}
+
+.dados .status ul li {
+    margin-left: 20px;
+}
